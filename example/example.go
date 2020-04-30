@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/codenio/msteams"
 )
@@ -12,11 +13,14 @@ func main() {
 	m.Card = m.NewMessageCard("Hi", "Testing OpenURI", "this is my summary")
 	m.Card.SetThemeColor("2DC72D")
 	m.Card.AddSections("foo", "bar", true)
-	m.Card.CreateOpenURIAction("Test Open URI", []msteams.URI{{
-		OS:  msteams.Windows,
-		URI: "https://www.google.com",
-	},
-	})
-
+	// m.Card.CreateOpenURIAction("Test Open URI", []msteams.URI{{
+	// 	OS:  msteams.Windows,
+	// 	URI: "https://www.google.com",
+	// },
+	// })
+	var actionCard msteams.ActionCardAction
+	actionCard.New("Add a comment")
+	m.Card.PotentialActions = append(m.Card.PotentialActions, actionCard)
+	log.Printf("Obj >>> %+v", m.Card)
 	m.SendMessage()
 }

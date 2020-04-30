@@ -44,8 +44,14 @@ const (
 	InvokeAddInCommand ActionType = "InvokeAddInCommand"
 )
 
+// Action ...
+type Action interface {
+	New(string)
+}
+
 // OpenURIAction Opens a URI in a separate browser or app.
 type OpenURIAction struct {
+	Type ActionType `json:"@type"`
 
 	// The name property defines the text that will be displayed on screen for the action.
 	Name string `json:"name"`
@@ -55,6 +61,12 @@ type OpenURIAction struct {
 	// The default operating system will in most cases simply open the URI in a web browser,
 	//  regardless of the actual operating system.
 	Targets []URI `json:"targets"`
+}
+
+// New implements Action interface
+func (a OpenURIAction) New(name string) {
+	a.Type = OpenURI
+	a.Name = name
 }
 
 // URI object for URI targets field in OpenURI Action
@@ -102,7 +114,7 @@ type Header struct {
 // ActionCardAction Presents additional UI that contains one or more Inputs,
 // along with associated actions that can be either OpenUri or HttpPOST types.
 type ActionCardAction struct {
-
+	Type ActionType `json:"@type"`
 	// Name defines the text that will be displayed on screen for the action.
 	Name string `json:"name"`
 
@@ -112,7 +124,13 @@ type ActionCardAction struct {
 	// Actions is an array of Action objects, that can be either of type OpenUri or HttpPOST.
 	// Actions of an ActionCard action cannot contain another ActionCard action.
 	// Either OpenUri or HttpPOST can be used.
-	Actions []OpenURIAction `json:"actions"`
+	Actions []Action `json:"actions"`
+}
+
+// New implements Action interface
+func (a ActionCardAction) New(name string) {
+	a.Type = ActionCard
+	a.Name = name
 }
 
 // InvokeAddInCommandAction Opens an Outlook add-in task pane. If the add-in is not installed,
@@ -154,7 +172,7 @@ func (card *MessageCard) CreateOpenURIAction(name string, tragets []URI) {
 	action := PotentialAction{
 		Type:    OpenURI,
 		Name:    name,
-		Actions: []OpenURIAction{openURI},
+		Actions: []Action{openURI},
 	}
 
 	card.PotentialActions = append(card.PotentialActions, action)

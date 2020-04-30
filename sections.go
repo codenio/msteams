@@ -39,7 +39,7 @@ type Section struct {
 	Images []Image `json:"images"`
 
 	// A collection of actions that can be invoked on this section. See Actions.
-	PotentialAction []OpenURIAction `json:"potentialAction"`
+	PotentialActions []PotentialAction `json:"potentialAction"`
 
 	Markdown bool `json:"markdown"`
 }

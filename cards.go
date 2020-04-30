@@ -55,15 +55,20 @@ type MessageCard struct {
 	Sections []Section `json:"sections"`
 
 	// A collection of actions that can be invoked on this card. See Actions.
-	PotentialActions []PotentialAction `json:"potentialAction"`
+	PotentialActions []Action `json:"potentialAction"`
 }
 
 // PotentialAction ...
 type PotentialAction struct {
-	Type    ActionType      `json:"@type"`
-	Name    string          `json:"name"`
-	Inputs  []Input         `json:"inputs"`
-	Actions []OpenURIAction `json:"actions"`
+	Type    ActionType `json:"@type"`
+	Name    string     `json:"name"`
+	Inputs  []Input    `json:"inputs"`
+	Actions []Action   `json:"actions"`
+}
+
+// New ...
+func (a PotentialAction) New(name string) {
+	a.Name = name
 }
 
 // NewMessageCard ...
